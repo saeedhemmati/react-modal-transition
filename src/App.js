@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import $ from 'jquery';
 import './app.scss';
 
@@ -6,6 +6,7 @@ function App() {
   const [el, setEl] = useState(0);
   const [width, setWidth] = useState(0);
   const [left, setLeft] = useState(0);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(0);
 
   useEffect(() => {
     $(window).on('load resize', function() {
@@ -31,6 +32,10 @@ function App() {
     });
   }, []);
 
+  /**
+   * 
+   * @param {Number} _index 
+   */
   const selectedMenuItem = (_index) => {
     const isActiveEl = document.querySelector('.is-active');
     setEl(_index);
@@ -50,6 +55,31 @@ function App() {
     left,
     width: '100%',
     height: '4rem',
+  };
+
+  /**
+   *
+   * @param {Number} _index 
+   */
+  const selectedSubCategoryHandler = (_e, _index) => {
+    setSelectedSubCategory(_index);
+    const el = document.querySelector('.sub-category-items');
+    const elStyle = el.style;
+    const oldSelected = document.querySelector('.selected-sub-category');
+    oldSelected.classList.remove('selected-sub-category');
+    switch (_index) {
+      case 0:
+        elStyle.transform = 'translateX(72px)';
+        break;
+      case 1:
+        elStyle.transform = 'translateX(0)';
+        break;
+      case 2:
+        elStyle.transform = 'translateX(-72px)';
+        break;
+    }
+
+    _e.target.classList.add('selected-sub-category');
   };
 
   return (
@@ -74,6 +104,33 @@ function App() {
           </li>
         </ul>
       </nav>
+
+      <section className="sub-category-container">
+        <div className="sub-category-items">
+          <span
+            className="sub-category-item selected-sub-category"
+            onClick={(e) => selectedSubCategoryHandler(e, 0)}
+          >
+            ALL
+          </span>
+          <span
+            className="sub-category-item middle-item"
+            onClick={(e) => selectedSubCategoryHandler(e, 1)}
+          >
+            PIZZA
+          </span>
+          <span
+            className="sub-category-item"
+            onClick={(e) => selectedSubCategoryHandler(e, 2)}
+          >
+            STEAK
+          </span>
+        </div>
+      </section>
+
+      <section className="content">
+
+      </section>
     </main>
   );
 }
